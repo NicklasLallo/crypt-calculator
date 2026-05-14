@@ -46,6 +46,18 @@ needs to support either the [Kitty graphics protocol][tgp] or
 [Sixel][sixel] for actual images (Kitty, WezTerm, recent Konsole,
 foot, ghostty). Other terminals fall back to a Unicode half-cell preview.
 
+If the auto-detect picks the wrong renderer (alacritty is a known
+offender — it false-positives on the sixel probe and ends up rendering
+blank cells), force one with the `CRYPT_CALCULATOR_RENDERER`
+environment variable:
+
+```sh
+CRYPT_CALCULATOR_RENDERER=halfcell uv run crypt-calculator
+```
+
+Accepted values: `auto` (default), `tgp` / `kitty`, `sixel`,
+`halfcell`, `unicode`.
+
 [tgp]: https://sw.kovidgoyal.net/kitty/graphics-protocol/
 [sixel]: https://en.wikipedia.org/wiki/Sixel
 

@@ -13,6 +13,7 @@ placeholder; if it doesn't, the user at least sees the text status.
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 import httpx
@@ -21,10 +22,36 @@ from textual.app import ComposeResult
 from textual.containers import Container, Vertical
 from textual.screen import ModalScreen
 from textual.widgets import Static
-from textual_image.widget import AutoImage
+from textual_image.widget import (
+    AutoImage,
+    HalfcellImage,
+    SixelImage,
+    TGPImage,
+    UnicodeImage,
+)
 
 from . import cards
 from .widgets import DismissOnOutsideClickMixin
+
+
+# textual-image probes the terminal for graphics support at import time
+# and picks one of TGP / sixel / halfcell / unicode. The probe is flaky
+# in some terminals — alacritty in particular has been observed to
+# false-positive on the sixel probe, after which AutoImage renders
+# nothing (alacritty silently drops the sixel escape data). This env
+# var lets users force a specific renderer to work around that.
+_RENDERER_OVERRIDES = {
+    "auto": AutoImage,
+    "tgp": TGPImage,
+    "kitty": TGPImage,
+    "sixel": SixelImage,
+    "halfcell": HalfcellImage,
+    "unicode": UnicodeImage,
+}
+ImageWidget = _RENDERER_OVERRIDES.get(
+    os.environ.get("CRYPT_CALCULATOR_RENDERER", "").strip().lower(),
+    AutoImage,
+)
 
 
 class CardImage(Container):
@@ -46,7 +73,7 @@ class CardImage(Container):
         min-width: 17;
         min-height: 12;
     }
-    CardImage AutoImage {
+    CardImage #card-img {
         width: 100%;
         height: 100%;
         background: transparent;
@@ -66,7 +93,7 @@ class CardImage(Container):
 
     def compose(self) -> ComposeResult:
         # Both children are always mounted; we toggle `display` to swap.
-        yield AutoImage(image=None, id="card-img")
+        yield ImageWidget(image=None, id="card-img")
         yield Static("", id="card-placeholder", classes="cardimage-placeholder")
 
     def on_mount(self) -> None:
@@ -112,8 +139,8 @@ class CardImage(Container):
 
     # ── internal display state ──────────────────────────────────────────────
 
-    def _img(self) -> AutoImage:
-        return self.query_one("#card-img", AutoImage)
+    def _img(self) -> ImageWidget:
+        return self.query_one("#card-img", ImageWidget)
 
     def _ph(self) -> Static:
         return self.query_one("#card-placeholder", Static)
@@ -187,7 +214,7 @@ class ZoomedCardScreen(DismissOnOutsideClickMixin, ModalScreen[None]):
     ZoomedCardScreen Label {
         margin-bottom: 1;
     }
-    ZoomedCardScreen AutoImage {
+    ZoomedCardScreen #zoom-img {
         /* 63:88 card aspect at ~2:1 cell aspect:
            width_cells = height_cells × 2 × 63/88, so 32 lines → ~46 cells. */
         width: 46;
@@ -207,7 +234,7 @@ class ZoomedCardScreen(DismissOnOutsideClickMixin, ModalScreen[None]):
     def compose(self) -> ComposeResult:
         with Vertical(id="zoom-container"):
             yield Static(f"[b]{self._name}[/]")
-            yield AutoImage(str(self._image_path))
+            yield ImageWidget(str(self._image_path), id="zoom-img")
 
     def action_cancel(self) -> None:
         self.dismiss(None)

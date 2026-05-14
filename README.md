@@ -20,11 +20,33 @@ every legal deck for the one with the best odds.
 
 [krcg]: https://static.krcg.org
 
-## Screenshot
+## Screenshots
 
-*Results tab after running the bundled Anson example — top decks,
-draw-outcome breakdown, side-by-side comparison against the user's
-manual deck, and card art for the selected result.*
+The tool walks you through four tabs:
+
+**1. Crypt** — list up to ten card names and (optionally) set a count
+per card to define your manual deck for comparison.
+
+![Crypt tab](resources/Crypt.jpg)
+
+**2. Rules** — author *perfect*, *good*, and *acceptable* rules.
+Anything that doesn't match falls into the implicit *unacceptable*
+bucket.
+
+![Rules tab](resources/Rules.jpg)
+
+**3. Run** — pick deck-size bounds and an objective, then start the
+optimiser.
+
+![Run tab](resources/Run.jpg)
+
+**4. Results** — top-K decks, draw-outcome breakdown, a side-by-side
+comparison against your manual deck, and card art for the selected
+deck.
+
+![Results tab](resources/Results.jpg)
+
+A worked example using the bundled *Anson* crypt:
 
 ![Results tab — Anson example](resources/ExampleResult.jpg)
 

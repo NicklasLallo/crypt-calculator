@@ -220,6 +220,12 @@ class PoolPane(VerticalScroll):
             self._status(f"[red]{e}[/red]")
             return
         self._status("")
+        # Keep self._pool in sync with the freshly-collected names, otherwise
+        # any later post_message that reads self._pool (e.g. the count-input
+        # handler below) ships a stale empty pool downstream — that broadcast
+        # then resets the Rules pane to "no names defined" the moment the user
+        # touches a count cell.
+        self._pool = pool
         self.post_message(PoolChanged(pool))
 
     def on_input_changed(self, event: Input.Changed) -> None:

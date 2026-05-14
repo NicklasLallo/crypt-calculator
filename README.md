@@ -54,9 +54,8 @@ when `$TMUX`, `$ZELLIJ`, or `$STY` is set. Set
 `CRYPT_CALCULATOR_RENDERER=auto` to opt back into auto-detection if
 your multiplexer is configured to pass graphics through.
 
-If the picked renderer is still wrong (alacritty has been observed to
-false-positive on the sixel probe even outside a multiplexer), force
-one with the env var:
+If auto-detection still picks the wrong renderer for your terminal,
+force one explicitly with the env var:
 
 ```sh
 CRYPT_CALCULATOR_RENDERER=halfcell uv run crypt-calculator

@@ -35,18 +35,16 @@ from .widgets import DismissOnOutsideClickMixin
 
 
 # textual-image probes the terminal for graphics support at import time
-# and picks one of TGP / sixel / halfcell / unicode. The probe is fragile
-# in two situations we care about:
+# and picks one of TGP / sixel / halfcell / unicode. Inside a terminal
+# multiplexer (tmux / zellij / screen) the probe sees the multiplexer's
+# emulated terminal — which typically advertises sixel without actually
+# forwarding graphics escapes to the host terminal, so AutoImage emits
+# sixel data that disappears into the void.
 #
-# - inside a terminal multiplexer (tmux / zellij / screen) the probe sees
-#   the multiplexer's emulated terminal — which typically advertises sixel
-#   without actually passing graphics escapes through to the host terminal,
-#   so AutoImage emits sixel data that disappears into the void.
-# - some host terminals (alacritty has been observed) false-positive on
-#   the sixel probe directly.
-#
-# CRYPT_CALCULATOR_RENDERER lets users force a specific renderer; we also
-# auto-fall-back to halfcell when we detect a multiplexer wrapper.
+# We auto-fall-back to halfcell when we detect a multiplexer wrapper.
+# CRYPT_CALCULATOR_RENDERER lets users force a specific renderer either
+# to opt back into auto-detection in a passthrough-configured multiplexer
+# or to work around any other misdetection.
 _RENDERER_OVERRIDES = {
     "auto": AutoImage,
     "tgp": TGPImage,

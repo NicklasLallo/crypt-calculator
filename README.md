@@ -20,19 +20,13 @@ every legal deck for the one with the best odds.
 
 [krcg]: https://static.krcg.org
 
-## Screenshots
+## Screenshot
 
-<!-- Replace these placeholders once you have screenshots ready. -->
+*Results tab after running the bundled Anson example — top decks,
+draw-outcome breakdown, side-by-side comparison against the user's
+manual deck, and card art for the selected result.*
 
-*Crypt tab — name your cards, set per-card counts for the manual deck.*
-![Crypt tab](docs/screenshots/crypt.png)
-
-*Rules tab — build perfect / good / acceptable rules with clause groups.*
-![Rules tab](docs/screenshots/rules.png)
-
-*Results — top decks, manual deck comparison, and card art for the
-selected deck.*
-![Results](docs/screenshots/results.png)
+![Results tab — Anson example](resources/ExampleResult.jpg)
 
 ## Install
 

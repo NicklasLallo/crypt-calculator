@@ -29,3 +29,6 @@ htmlcov/
 # Local scratch / personal data
 pool.yaml
 *.local.yaml
+
+# Screenshot sources — we commit jpegs only, the originals are local-only
+*.png

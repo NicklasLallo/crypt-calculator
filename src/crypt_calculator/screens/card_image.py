@@ -35,11 +35,18 @@ from .widgets import DismissOnOutsideClickMixin
 
 
 # textual-image probes the terminal for graphics support at import time
-# and picks one of TGP / sixel / halfcell / unicode. The probe is flaky
-# in some terminals — alacritty in particular has been observed to
-# false-positive on the sixel probe, after which AutoImage renders
-# nothing (alacritty silently drops the sixel escape data). This env
-# var lets users force a specific renderer to work around that.
+# and picks one of TGP / sixel / halfcell / unicode. The probe is fragile
+# in two situations we care about:
+#
+# - inside a terminal multiplexer (tmux / zellij / screen) the probe sees
+#   the multiplexer's emulated terminal — which typically advertises sixel
+#   without actually passing graphics escapes through to the host terminal,
+#   so AutoImage emits sixel data that disappears into the void.
+# - some host terminals (alacritty has been observed) false-positive on
+#   the sixel probe directly.
+#
+# CRYPT_CALCULATOR_RENDERER lets users force a specific renderer; we also
+# auto-fall-back to halfcell when we detect a multiplexer wrapper.
 _RENDERER_OVERRIDES = {
     "auto": AutoImage,
     "tgp": TGPImage,
@@ -48,10 +55,22 @@ _RENDERER_OVERRIDES = {
     "halfcell": HalfcellImage,
     "unicode": UnicodeImage,
 }
-ImageWidget = _RENDERER_OVERRIDES.get(
-    os.environ.get("CRYPT_CALCULATOR_RENDERER", "").strip().lower(),
-    AutoImage,
-)
+
+
+def _in_multiplexer() -> bool:
+    return any(os.environ.get(v) for v in ("TMUX", "ZELLIJ", "STY"))
+
+
+def _select_image_widget() -> type:
+    override = os.environ.get("CRYPT_CALCULATOR_RENDERER", "").strip().lower()
+    if override in _RENDERER_OVERRIDES:
+        return _RENDERER_OVERRIDES[override]
+    if _in_multiplexer():
+        return HalfcellImage
+    return AutoImage
+
+
+ImageWidget = _select_image_widget()
 
 
 class CardImage(Container):

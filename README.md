@@ -46,17 +46,24 @@ needs to support either the [Kitty graphics protocol][tgp] or
 [Sixel][sixel] for actual images (Kitty, WezTerm, recent Konsole,
 foot, ghostty). Other terminals fall back to a Unicode half-cell preview.
 
-If the auto-detect picks the wrong renderer (alacritty is a known
-offender — it false-positives on the sixel probe and ends up rendering
-blank cells), force one with the `CRYPT_CALCULATOR_RENDERER`
-environment variable:
+**Running inside tmux / zellij / screen?** The auto-probe sees the
+multiplexer's emulated terminal — which almost always advertises sixel
+support without actually forwarding graphics escapes to the host
+terminal — so the app falls back to half-cell rendering automatically
+when `$TMUX`, `$ZELLIJ`, or `$STY` is set. Set
+`CRYPT_CALCULATOR_RENDERER=auto` to opt back into auto-detection if
+your multiplexer is configured to pass graphics through.
+
+If the picked renderer is still wrong (alacritty has been observed to
+false-positive on the sixel probe even outside a multiplexer), force
+one with the env var:
 
 ```sh
 CRYPT_CALCULATOR_RENDERER=halfcell uv run crypt-calculator
 ```
 
-Accepted values: `auto` (default), `tgp` / `kitty`, `sixel`,
-`halfcell`, `unicode`.
+Accepted values: `auto`, `tgp` / `kitty`, `sixel`, `halfcell`,
+`unicode`.
 
 [tgp]: https://sw.kovidgoyal.net/kitty/graphics-protocol/
 [sixel]: https://en.wikipedia.org/wiki/Sixel

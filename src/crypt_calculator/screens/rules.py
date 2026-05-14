@@ -881,7 +881,7 @@ class RulesPane(VerticalScroll):
                 yield ListView(id=f"list-{bucket}")
                 with Horizontal(classes="bucket-actions"):
                     yield Button(
-                        f"Add new {colored_bucket(bucket)} rule…",
+                        f"Add new {colored_bucket(bucket)} rule",
                         id=f"add-{bucket}",
                     )
                     yield Button("Edit selected", id=f"edit-{bucket}")

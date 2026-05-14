@@ -1,90 +1,83 @@
 version: 2
 default: unacceptable
 perfect:
-- clauses:
-  - any:
-    - type: count_at_least
-      card: Anson
-      k: 1
-  - any:
-    - type: count_at_least
-      card: Volker, The Puppet Prince
-      k: 1
-  - any:
-    - type: count_at_least
-      card: Sarah Brando
-      k: 1
-  - any:
-    - type: unique_at_least
-      k: 1
-      excluding:
-      - Anson
-      - Sarah Brando
-      - Volker, The Puppet Prince
-- clauses:
-  - any:
-    - type: count_at_least
-      card: Anson
-      k: 1
-  - any:
-    - type: count_at_least
-      card: Black Cat
-      k: 1
-  - any:
-    - type: count_at_least
-      card: Sarah Brando
-      k: 1
-  - any:
-    - type: unique_at_least
-      k: 1
-      excluding:
-      - Anson
-      - Black Cat
-      - Sarah Brando
+  - clauses:
+      - any:
+          - type: count_at_least
+            card: Anson
+            k: 1
+      - any:
+          - type: count_at_least
+            card: Volker, The Puppet Prince
+            k: 1
+      - any:
+          - type: count_at_least
+            card: Sarah Brando
+            k: 1
+      - any:
+          - type: unique_at_least
+            k: 1
+            excluding:
+              - Anson
+              - Sarah Brando
+              - Volker, The Puppet Prince
+  - clauses:
+      - any:
+          - type: count_at_least
+            card: Anson
+            k: 1
+      - any:
+          - type: count_at_least
+            card: Black Cat
+            k: 1
+      - any:
+          - type: count_at_least
+            card: Sarah Brando
+            k: 1
+      - any:
+          - type: unique_at_least
+            k: 1
+            excluding:
+              - Anson
+              - Black Cat
+              - Sarah Brando
 good:
-- clauses:
-  - any:
-    - type: count_at_least
-      card: Anson
-      k: 1
-  - any:
-    - type: count_at_least
-      card: Volker, The Puppet Prince
-      k: 1
-  - any:
-    - type: unique_at_least
-      k: 1
-      excluding:
-      - Anson
-      - Volker, The Puppet Prince
-- clauses:
-  - any:
-    - type: count_at_least
-      card: Anson
-      k: 1
-  - any:
-    - type: count_at_least
-      card: Black Cat
-      k: 1
-  - any:
-    - type: count_at_least
-      card: Sarah Brando
-      k: 1
-  - any:
-    - type: unique_at_least
-      k: 1
-      excluding:
-      - Anson
-      - Black Cat
-      - Sarah Brando
+  - clauses:
+      - any:
+          - type: count_at_least
+            card: Anson
+            k: 1
+      - any:
+          - type: count_at_least
+            card: Volker, The Puppet Prince
+            k: 1
+      - any:
+          - type: unique_at_least
+            k: 1
+            excluding:
+              - Anson
+              - Volker, The Puppet Prince
+  - clauses:
+      - any:
+          - type: count_at_least
+            card: Anson
+            k: 1
+      - any:
+          - type: count_at_least
+            card: Black Cat
+            k: 1
+      - any:
+          - type: count_at_least
+            card: Sarah Brando
+            k: 1
 acceptable:
-- clauses:
-  - any:
-    - type: count_at_least
-      card: Anson
-      k: 1
-  - any:
-    - type: unique_at_least
-      k: 2
-      excluding:
-      - Anson
+  - clauses:
+      - any:
+          - type: count_at_least
+            card: Anson
+            k: 1
+      - any:
+          - type: unique_at_least
+            k: 2
+            excluding:
+              - Anson

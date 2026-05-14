@@ -8,18 +8,9 @@ from ..optimize import DeckResult
 from ..pool import Pool
 from ..rules import BUCKETS, Bucket
 from .card_art import CardArtPanel
+from .widgets import BUCKET_COLORS
 
 BAR_WIDTH = 30
-
-# A smooth, subdued green→red gradient. Roughly equal lightness across the
-# four stops, saturations kept under ~50% so the bars sit comfortably on the
-# dark background without screaming.
-BUCKET_COLORS: dict[Bucket, str] = {
-    "perfect": "#6FB36A",       # muted forest green
-    "good": "#A8C46A",          # yellow-green (replaces cyan)
-    "acceptable": "#D7A968",    # muted amber
-    "unacceptable": "#C46A66",  # dusty red
-}
 
 # Delta colors used in the comparison panel. Slightly more saturated than the
 # bucket palette so improvements/regressions read at a glance, without going

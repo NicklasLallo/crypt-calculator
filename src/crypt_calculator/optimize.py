@@ -10,7 +10,7 @@ from .rules import BUCKETS, Bucket, Hand, RuleSet
 
 ObjectiveKind = Literal["max_perfect", "max_pg", "max_pga", "weighted"]
 
-DEFAULT_WEIGHTS: tuple[float, float, float, float] = (5.0, 4.0, 3.0, 0.0)  # P, G, A, U
+DEFAULT_WEIGHTS: tuple[float, float, float, float] = (5.0, 4.0, 2.0, 0.0)  # P, G, A, U
 
 
 @dataclass(frozen=True)

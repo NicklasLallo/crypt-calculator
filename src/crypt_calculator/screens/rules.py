@@ -21,7 +21,7 @@ from textual.widgets import (
     Static,
 )
 from textual.widgets.selection_list import Selection
-from .widgets import DismissOnOutsideClickMixin, RadioButton
+from .widgets import DismissOnOutsideClickMixin, RadioButton, colored_bucket
 
 from ..io import load_ruleset, save_ruleset
 from ..pool import Pool
@@ -350,13 +350,17 @@ class RuleEditorScreen(
                 yield Label("Bucket:")
                 with RadioSet(id="bucket-select"):
                     yield RadioButton(
-                        "Perfect", value=(self.initial_bucket == "perfect"), id="b-perfect"
+                        colored_bucket("perfect"),
+                        value=(self.initial_bucket == "perfect"),
+                        id="b-perfect",
                     )
                     yield RadioButton(
-                        "Good", value=(self.initial_bucket == "good"), id="b-good"
+                        colored_bucket("good"),
+                        value=(self.initial_bucket == "good"),
+                        id="b-good",
                     )
                     yield RadioButton(
-                        "Acceptable",
+                        colored_bucket("acceptable"),
                         value=(self.initial_bucket == "acceptable"),
                         id="b-acceptable",
                     )
@@ -865,15 +869,21 @@ class RulesPane(VerticalScroll):
 
     def compose(self) -> ComposeResult:
         yield Label(
-            "[b]Rules[/b] — priority: Perfect > Good > Acceptable > "
-            "(default: Unacceptable)"
+            "[b]Rules[/b] — priority: "
+            f"{colored_bucket('perfect', bold=True)} > "
+            f"{colored_bucket('good', bold=True)} > "
+            f"{colored_bucket('acceptable', bold=True)} > "
+            f"(default: {colored_bucket('unacceptable', bold=True)})"
         )
         for bucket in RULE_BUCKETS:
             with Container(classes="bucket-section", id=f"section-{bucket}"):
-                yield Label(f"[b]{bucket.capitalize()}[/b]")
+                yield Label(colored_bucket(bucket, bold=True))
                 yield ListView(id=f"list-{bucket}")
                 with Horizontal(classes="bucket-actions"):
-                    yield Button(f"Add new {bucket} rule…", id=f"add-{bucket}")
+                    yield Button(
+                        f"Add new {colored_bucket(bucket)} rule…",
+                        id=f"add-{bucket}",
+                    )
                     yield Button("Edit selected", id=f"edit-{bucket}")
                     yield Button("Delete selected", id=f"delete-{bucket}")
         with Horizontal(id="ruleset-actions"):

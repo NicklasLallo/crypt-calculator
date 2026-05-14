@@ -114,8 +114,8 @@ def test_four_objectives_run_and_are_consistent():
     assert top_pg >= top_p - 1e-9
     assert top_pga >= top_pg - 1e-9
 
-    # Weighted with default weights (5,4,3,0): score should equal the dot
-    # product. Sanity check that the returned score matches.
+    # Weighted with default weights: score should equal the dot product.
+    # Sanity check that the returned score matches.
     w = Objective(kind="weighted", weights=DEFAULT_WEIGHTS)
     results, _ = optimize(pool, rules, 12, 12, objective=w, top_k=1)
     d = results[0]

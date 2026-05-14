@@ -7,6 +7,11 @@ from textual.message import Message
 from textual.widgets import Button, Input, Label, Static
 
 from ..optimize import DEFAULT_WEIGHTS, Objective, ObjectiveKind
+from .widgets import colored_bucket
+
+# When the search space grows past this, the optimizer can take long
+# enough that a hint is worth showing.
+BIG_SEARCH_SPACE = 20_000
 
 
 class RunRequested(Message):
@@ -19,9 +24,11 @@ class RunRequested(Message):
 
 class RunPane(VerticalScroll):
     BINDINGS = [
-        Binding("ctrl+1", "run_max_perfect", "Run P(Perfect)", priority=True),
-        Binding("ctrl+2", "run_max_pg", "Run P(P∪G)", priority=True),
-        Binding("ctrl+3", "run_max_pga", "Run P(P∪G∪A)", priority=True),
+        Binding("ctrl+1", "run_max_perfect", "Run Perfect", priority=True),
+        Binding("ctrl+2", "run_max_pg", "Run Perfect+Good", priority=True),
+        Binding(
+            "ctrl+3", "run_max_pga", "Run Perfect+Good+Accept", priority=True
+        ),
         Binding("ctrl+4", "run_weighted", "Run weighted", priority=True),
     ]
 
@@ -85,42 +92,55 @@ class RunPane(VerticalScroll):
             yield Input(value="12", id="size-min", classes="size-input")
             yield Label(" to ")
             yield Input(value="14", id="size-max", classes="size-input")
+        p = colored_bucket("perfect", bold=True)
+        g = colored_bucket("good", bold=True)
+        a = colored_bucket("acceptable", bold=True)
+        u = colored_bucket("unacceptable", bold=True)
         with Horizontal(id="union-buttons"):
-            yield Button("Run P(Perfect)", id="run-p", variant="primary")
-            yield Button("Run P(P ∪ G)", id="run-pg", variant="primary")
-            yield Button("Run P(P ∪ G ∪ A)", id="run-pga", variant="primary")
+            yield Button(
+                f"Maximize {p}", id="run-p", variant="primary"
+            )
+            yield Button(
+                f"Maximize {p} + {g}", id="run-pg", variant="primary"
+            )
+            yield Button(
+                f"Maximize {p} + {g} + {a}",
+                id="run-pga",
+                variant="primary",
+            )
         with Vertical(id="weighted-box"):
             yield Label(
-                "[b]Weighted sum[/b] — score = wP·P + wG·G + wA·A + wU·U "
-                "(integer weights; negatives allowed)"
+                f"[b]Weighted sum[/b] — score = w{p}·P(Perfect) + "
+                f"w{g}·P(Good) + w{a}·P(Acceptable) + w{u}·P(Unacceptable). "
+                "Integer weights; negatives allowed."
             )
             with Horizontal(classes="weight-row"):
-                yield Label("P")
+                yield Label(p)
                 yield Input(
                     value=str(int(DEFAULT_WEIGHTS[0])),
                     id="w-perfect",
                     classes="weight-input",
                 )
-                yield Label("G")
+                yield Label(g)
                 yield Input(
                     value=str(int(DEFAULT_WEIGHTS[1])),
                     id="w-good",
                     classes="weight-input",
                 )
-                yield Label("A")
+                yield Label(a)
                 yield Input(
                     value=str(int(DEFAULT_WEIGHTS[2])),
                     id="w-acceptable",
                     classes="weight-input",
                 )
-                yield Label("U")
+                yield Label(u)
                 yield Input(
                     value=str(int(DEFAULT_WEIGHTS[3])),
                     id="w-unacceptable",
                     classes="weight-input",
                 )
             yield Button(
-                "Run — Maximize weighted sum",
+                "Maximize weighted sum",
                 id="run-weighted",
                 variant="primary",
             )
@@ -227,10 +247,16 @@ class RunPane(VerticalScroll):
         self.query_one("#info-config", Static).update("\n".join(cfg))
 
         space_lines = [
-            f"[b]Search space[/b] — {total_decks} distinct deck{'s' if total_decks != 1 else ''} to evaluate"
+            f"[b]Search space[/b] — {total_decks:,} distinct "
+            f"deck{'s' if total_decks != 1 else ''} to evaluate"
         ]
         for sz in sorted(breakdown):
-            space_lines.append(f"  size {sz}: {breakdown[sz]} decks")
+            space_lines.append(f"  size {sz}: {breakdown[sz]:,} decks")
+        if total_decks > BIG_SEARCH_SPACE:
+            space_lines.append(
+                "  [#D7A968]⚠ Big search space — this might take a "
+                "little longer.[/]"
+            )
         self.query_one("#info-space", Static).update("\n".join(space_lines))
 
     def show_run_summary(
@@ -246,14 +272,19 @@ class RunPane(VerticalScroll):
     ) -> None:
         rate = evaluated / (elapsed_ms / 1000) if elapsed_ms > 0 else 0
         wp, wg, wa, wu = (int(w) for w in weights)
+        p = colored_bucket("perfect")
+        g = colored_bucket("good")
+        a = colored_bucket("acceptable")
+        u = colored_bucket("unacceptable")
         text = (
             "[b]Last run[/b]\n"
             f"  Elapsed: [b]{elapsed_ms:.1f} ms[/b]   "
             f"Throughput: [b]{rate:,.0f}[/b] decks/sec\n"
-            f"  Decks evaluated: [b]{evaluated}[/b]\n"
-            f"  Top P(Perfect):                 [b]{top_p:.4f}[/b]\n"
-            f"  Top P(Perfect ∪ Good):          [b]{top_pg:.4f}[/b]\n"
-            f"  Top P(Perfect ∪ Good ∪ Accept): [b]{top_pga:.4f}[/b]\n"
-            f"  Top weighted (wP={wp} wG={wg} wA={wa} wU={wu}): [b]{top_weighted:.4f}[/b]"
+            f"  Decks evaluated: [b]{evaluated:,}[/b]\n"
+            f"  Top P({p}):                                [b]{top_p:.4f}[/b]\n"
+            f"  Top P({p} + {g}):                         [b]{top_pg:.4f}[/b]\n"
+            f"  Top P({p} + {g} + {a}):            [b]{top_pga:.4f}[/b]\n"
+            f"  Top weighted (w{p}={wp} w{g}={wg} w{a}={wa} w{u}={wu}): "
+            f"[b]{top_weighted:.4f}[/b]"
         )
         self.query_one("#info-last-run", Static).update(text)

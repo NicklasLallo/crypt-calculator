@@ -8,6 +8,31 @@ from textual.screen import ModalScreen
 from textual.widgets import Button, Label, RadioButton as _StockRadioButton
 from textual.widgets import Static
 
+from ..rules import Bucket
+
+# Single source of truth for bucket colours, used by every UI surface
+# that mentions a bucket (Rules, Run, Results) so the palette stays
+# consistent. A smooth, subdued green→red gradient — saturations under
+# ~50% so the text reads cleanly on the dark background.
+BUCKET_COLORS: dict[Bucket, str] = {
+    "perfect": "#6FB36A",       # muted forest green
+    "good": "#A8C46A",          # yellow-green
+    "acceptable": "#D7A968",    # muted amber
+    "unacceptable": "#C46A66",  # dusty red
+}
+
+
+def colored_bucket(bucket: Bucket, *, bold: bool = False) -> str:
+    """Return Rich markup for ``bucket`` styled with the bucket palette.
+
+    Example: ``colored_bucket("perfect")`` → ``"[#6FB36A]Perfect[/]"``.
+    """
+    color = BUCKET_COLORS[bucket]
+    body = bucket.capitalize()
+    if bold:
+        body = f"[b]{body}[/b]"
+    return f"[{color}]{body}[/]"
+
 
 class RadioButton(_StockRadioButton):
     """Same as textual.widgets.RadioButton but with a narrow inner glyph.

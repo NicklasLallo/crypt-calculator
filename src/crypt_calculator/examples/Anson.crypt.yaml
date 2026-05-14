@@ -1,0 +1,12 @@
+version: 1
+cards:
+- name: Anson
+  count: 5
+- name: Volker, The Puppet Prince
+  count: 3
+- name: Sarah Brando
+  count: 2
+- name: Black Cat
+  count: 1
+- name: Anneke
+  count: 1

@@ -1,0 +1,20 @@
+version: 2
+default: unacceptable
+perfect:
+  - clauses:
+      - any:
+          - { type: count_at_least, card: "Goratrix", k: 1 }
+      - any:
+          - { type: unique_at_least, k: 3, excluding: ["Goratrix"] }
+good:
+  - clauses:
+      - any:
+          - { type: count_at_least, card: "Goratrix", k: 1 }
+      - any:
+          - { type: unique_at_least, k: 2, excluding: ["Goratrix"] }
+acceptable:
+  - clauses:
+      - any:
+          - { type: count_at_least, card: "Goratrix", k: 1 }
+      - any:
+          - { type: unique_at_least, k: 1, excluding: ["Goratrix"] }

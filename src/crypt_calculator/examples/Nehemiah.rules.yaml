@@ -1,0 +1,87 @@
+version: 2
+default: unacceptable
+perfect:
+  - clauses:
+      - any:
+          - type: count_at_least
+            card: Nehemiah
+            k: 1
+      - any:
+          - type: count_at_least
+            card: Lutz von Hohenzollern
+            k: 1
+      - any:
+          - type: unique_at_least
+            k: 2
+            excluding:
+              - Lutz von Hohenzollern
+              - Nehemiah
+good:
+  - clauses:
+      - any:
+          - type: count_at_least
+            card: Nehemiah
+            k: 1
+      - any:
+          - type: count_at_least
+            card: Lutz von Hohenzollern
+            k: 1
+      - any:
+          - type: count_at_least
+            card: Dmitra Ilyanova
+            k: 1
+          - type: count_at_least
+            card: Dark Selina
+            k: 1
+  - clauses:
+      - any:
+          - type: count_at_least
+            card: Nehemiah
+            k: 1
+      - any:
+          - type: count_at_least
+            card: Adana de Sforza
+            k: 1
+      - any:
+          - type: count_at_least
+            card: Dmitra Ilyanova
+            k: 1
+          - type: count_at_least
+            card: Dark Selina
+            k: 1
+acceptable:
+  - clauses:
+      - any:
+          - type: count_at_least
+            card: Lutz von Hohenzollern
+            k: 1
+      - any:
+          - type: unique_at_least
+            k: 2
+            excluding:
+              - Lutz von Hohenzollern
+  - clauses:
+      - any:
+          - type: count_at_least
+            card: Adana de Sforza
+            k: 1
+      - any:
+          - type: unique_at_least
+            k: 2
+            excluding:
+              - Adana de Sforza
+  - clauses:
+      - any:
+          - type: count_at_least
+            card: Nehemiah
+            k: 1
+      - any:
+          - type: count_at_least
+            card: Lutz von Hohenzollern
+            k: 1
+          - type: count_at_least
+            card: Adana de Sforza
+            k: 1
+          - type: count_at_least
+            card: Dmitra Ilyanova
+            k: 1

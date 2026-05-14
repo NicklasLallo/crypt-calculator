@@ -1,0 +1,52 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "crypt_calculator"
+version = "0.1.0"
+description = "Deck odds optimizer for a 4-card-draw card game"
+readme = "README.md"
+requires-python = ">=3.12"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [
+    { name = "Nicklas Lallo" },
+]
+keywords = ["cards", "deck", "optimizer", "tui", "textual"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: End Users/Desktop",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Games/Entertainment",
+]
+dependencies = [
+    "textual>=0.79",
+    "pyyaml>=6.0",
+    "textual-image>=0.12.0",
+    "httpx>=0.28.1",
+]
+
+[project.urls]
+Homepage = "https://github.com/NicklasLallo/crypt-calculator"
+Repository = "https://github.com/NicklasLallo/crypt-calculator"
+Issues = "https://github.com/NicklasLallo/crypt-calculator/issues"
+
+[project.scripts]
+crypt-calculator = "crypt_calculator.app:main"
+
+[dependency-groups]
+dev = ["pytest>=8.0"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+crypt_calculator = ["examples/*.yaml"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

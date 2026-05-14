@@ -1,0 +1,31 @@
+# Byte-compiled / optimized
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Editor / OS detritus
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# Test caches
+.pytest_cache/
+.tox/
+.coverage
+htmlcov/
+
+# Local scratch / personal data
+pool.yaml
+*.local.yaml

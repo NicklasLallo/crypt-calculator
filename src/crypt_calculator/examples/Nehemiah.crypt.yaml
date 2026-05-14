@@ -1,0 +1,12 @@
+version: 1
+cards:
+- name: Nehemiah
+  count: 4
+- name: Lutz von Hohenzollern
+  count: 3
+- name: Adana de Sforza
+  count: 2
+- name: Dmitra Ilyanova
+  count: 2
+- name: Dark Selina
+  count: 1

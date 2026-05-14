@@ -11,7 +11,7 @@ every legal deck for the one with the best odds.
   deck composition, classified into outcome buckets by your rules.
 - **Optimiser** — searches over deck size and composition for the best
   decks under one of four objectives (max P, max P∪G, max P∪G∪A, or a
-  weighted sum). Returns the top-K results so you can compare them.
+  weighted sum). Returns the top-3 results so you can compare them.
 - **Manual deck** — enter your own counts on the Crypt tab and the tool
   evaluates them alongside the optimiser's picks, with a side-by-side
   comparison panel.
@@ -40,7 +40,7 @@ optimiser.
 
 ![Run tab](resources/Run.jpg)
 
-**4. Results** — top-K decks, draw-outcome breakdown, a side-by-side
+**4. Results** — top-3 decks, draw-outcome breakdown, a side-by-side
 comparison against your manual deck, and card art for the selected
 deck.
 

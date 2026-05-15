@@ -101,6 +101,20 @@ After running **Install examples** they land in
 `~/.local/share/crypt-calculator/` and are pickable from the Load
 dialogs.
 
+## File locations
+
+Saved crypts and rule-sets, the first-run config flag, and the
+card-art cache are resolved via
+[platformdirs](https://github.com/platformdirs/platformdirs) so they
+land in the native location on every platform. `XDG_DATA_HOME` /
+`XDG_CONFIG_HOME` / `XDG_CACHE_HOME` are honoured on Linux and BSD.
+
+| | data | config | cache |
+|---|---|---|---|
+| Linux/BSD | `~/.local/share/crypt-calculator` | `~/.config/crypt-calculator` | `~/.cache/crypt-calculator/cards` |
+| macOS | `~/Library/Application Support/crypt-calculator` | `~/Library/Preferences/crypt-calculator` | `~/Library/Caches/crypt-calculator/cards` |
+| Windows | `%LOCALAPPDATA%\crypt-calculator` | `%LOCALAPPDATA%\crypt-calculator` | `%LOCALAPPDATA%\crypt-calculator\Cache\cards` |
+
 ## License
 
 [MIT](LICENSE).

@@ -1,9 +1,8 @@
 """User-data and config locations for crypt_calculator.
 
-The TUI stores user-saved YAML files (crypts + rule-sets) under the XDG
-data directory, and a small config file (first-run state) under the XDG
-config directory. Falls back to the conventional Linux defaults when the
-XDG environment variables aren't set.
+Resolved via :mod:`platformdirs` so paths land in the right place on every
+platform — XDG dirs on Linux/BSD (so existing installs keep working),
+``%LOCALAPPDATA%`` on Windows, ``~/Library/Application Support`` on macOS.
 
 Bundled examples live as package data under ``crypt_calculator/examples``
 and are accessed via :mod:`importlib.resources` so they work both from a
@@ -13,23 +12,21 @@ source checkout and a ``pip install``.
 from __future__ import annotations
 
 import importlib.resources as ir
-import os
 from importlib.abc import Traversable
 from pathlib import Path
 
+import platformdirs
 import yaml
 
 APP_NAME = "crypt-calculator"
 
 
 def data_dir() -> Path:
-    base = os.environ.get("XDG_DATA_HOME") or str(Path.home() / ".local" / "share")
-    return Path(base) / APP_NAME
+    return platformdirs.user_data_path(APP_NAME, appauthor=False)
 
 
 def config_dir() -> Path:
-    base = os.environ.get("XDG_CONFIG_HOME") or str(Path.home() / ".config")
-    return Path(base) / APP_NAME
+    return platformdirs.user_config_path(APP_NAME, appauthor=False)
 
 
 def config_path() -> Path:

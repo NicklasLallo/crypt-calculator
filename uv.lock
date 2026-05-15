@@ -39,6 +39,7 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "httpx" },
+    { name = "platformdirs" },
     { name = "pyyaml" },
     { name = "textual" },
     { name = "textual-image" },
@@ -52,6 +53,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "httpx", specifier = ">=0.28.1" },
+    { name = "platformdirs", specifier = ">=4.0" },
     { name = "pyyaml", specifier = ">=6.0" },
     { name = "textual", specifier = ">=0.79" },
     { name = "textual-image", specifier = ">=0.12.0" },

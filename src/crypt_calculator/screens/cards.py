@@ -17,7 +17,8 @@ Examples:
   "Volker, The Puppet Prince"  -> "volkerthepuppetprince"
   "Gael Pilet" (with accent)   -> "gaelpilet"
 
-The cache lives under ``~/.cache/crypt_calculator/cards/``. Successful
+The cache lives in the platform's user-cache directory under a
+``cards/`` subfolder (resolved via :mod:`platformdirs`). Successful
 fetches write ``<slug>.jpg``; 404s write a zero-byte ``<slug>.miss``
 sentinel so we don't re-hit krcg for names it doesn't have art for.
 """
@@ -29,10 +30,14 @@ import unicodedata
 from pathlib import Path
 from typing import TYPE_CHECKING
 
+import platformdirs
+
+from ..userdata import APP_NAME
+
 if TYPE_CHECKING:
     import httpx
 
-CACHE_DIR = Path.home() / ".cache" / "crypt_calculator" / "cards"
+CACHE_DIR = platformdirs.user_cache_path(APP_NAME, appauthor=False) / "cards"
 CARD_URL_TEMPLATE = "https://static.krcg.org/card/{slug}.jpg"
 
 
